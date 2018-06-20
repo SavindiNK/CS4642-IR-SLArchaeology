@@ -19,13 +19,13 @@ class ArticleSpider(scrapy.Spider):
 			yield response.follow(link, self.parse_article)
 
 	def parse_article(self, response):
-		title = response.css('h1.page-title::text').extract_first()
-		author_url = response.css('span.meta-author a::attr(href)').extract_first()
-		author = response.css('span.meta-author a::text').extract_first()
-		category = response.css('span.meta-cats a::text').extract()
-		tags = response.css('span.meta-tags a::text').extract()
-		timestamp = response.css('span.updated::text').extract_first()
-		content = response.css('div.entry-content p::text').extract()
+		title = response.xpath('//h1[@class="page-title"]//text()').extract_first()
+		author_url = response.xpath('//span[@class="meta-author"]//a//@href').extract_first()
+		author = response.xpath('//span[@class="meta-author"]//a//text()').extract_first()
+		category = response.xpath('//span[@class="meta-cats"]//a//text()').extract()
+		tags = response.xpath('//span[@class="meta-tags"]//a//text()').extract()
+		timestamp = response.xpath('//span[@class="updated"]//text()').extract_first()
+		content = response.xpath('//div[@class="entry-content"]/p//text()').extract()
 
 		yield {
 			'title': title,
