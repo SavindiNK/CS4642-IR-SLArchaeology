@@ -19,6 +19,7 @@ class ArticleSpider(scrapy.Spider):
 			yield response.follow(link, self.parse_article)
 
 	def parse_article(self, response):
+		article_id = response.url.strip().split("/")[-1]
 		title = response.xpath('//h1[@class="page-title"]//text()').extract_first()
 		author_url = response.xpath('//span[@class="meta-author"]//a//@href').extract_first()
 		author = response.xpath('//span[@class="meta-author"]//a//text()').extract_first()
@@ -28,6 +29,7 @@ class ArticleSpider(scrapy.Spider):
 		content = response.xpath('//div[@class="entry-content"]/p//text()').extract()
 
 		yield {
+			'id':article_id,
 			'title': title,
 			'author_url': author_url,
 			'author':author,
